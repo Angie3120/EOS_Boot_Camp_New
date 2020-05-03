@@ -206,9 +206,13 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
             uint64_t delete_post;
 
             auto primary_key() const {return log_id;}
-            auto by_username() const {return username.value;}
+	    //Here I can only use uint64_t, not sure of why
+            uint64_t by_username() const {return username.value;}
         };
-        typedef multi_index <name("carpool"), carpoolog> carpool_index;
+        typedef multi_index <
+	  "carpool"_n, carpoolog,
+	  indexed_by<"byname"_n, const_mem_fun<carpoolog, uint64_t, &carpoolog::by_username>>
+          > carpool_index;
 
         TABLE joinride{
 
@@ -218,9 +222,12 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
             uint64_t size_req;
 
             auto primary_key() const {return jridx;}
-            auto by_username() const {return username.value;}
+            uint64_t by_username() const {return username.value;}
         };
-        typedef multi_index <name("joinrt"),joinride> joinride_index;
+        typedef multi_index <
+	  "joinrt"_n, joinride,
+	  indexed_by<"byname"_n, const_mem_fun<joinride, uint64_t, &joinride::by_username>>
+	  > joinride_index;
 
         TABLE user_info {
         name            username;
