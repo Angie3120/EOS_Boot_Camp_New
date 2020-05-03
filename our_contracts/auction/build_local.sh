@@ -2,31 +2,6 @@
 
 
 ################################################################################
-#############################COMPILE & Deploy###################################
-################################################################################
-
-#Compile and deploy eosio.token
-cd /home/aanu/workdirectory/eosio.cdt/bootcamp/EOS_Boot_Camp_New/existing_contracts/eosio.contracts/contracts/eosio.token
-eosio-cpp -I include -o eosio.token.wasm src/eosio.token.cpp --abigen
-cleos set contract eosio.token . --abi eosio.token.abi -p eosio.token@active
-
-#Compile and deploy auction
-cd /home/aanu/workdirectory/eosio.cdt/bootcamp/EOS_Boot_Camp_New/our_contracts/auction
-eosio-cpp --abigen auction.cpp -o auction.wasm
-cleos set contract auction . --abi auction.abi -p auction@active
-
-#Compile and deploy carpool
-cd /home/aanu/workdirectory/eosio.cdt/bootcamp/EOS_Boot_Camp_New/our_contracts/carpool
-eosio-cpp --abigen carpool.cpp -o carpool.wasm -I /home/aanu/workirectory/eosio.cdt/bootcamp/EOS_Boot_Camp_New/existing_contracts/eosio.contracts/contracts/eosio.token/
-cleos set contract carpool . --abi carpool.abi -p carpool@active
-
-#Compile and deploy tradeticket
-cd /home/aanu/workdirectory/eosio.cdt/bootcamp/EOS_Boot_Camp_New/our_contracts/tradeticket
-eosio-cpp --abigen tradeticket.cpp -o tradeticket.wasm -I ../auction
-cleos set contract tradeticket . --abi tradeticket.abi -p tradeticket@active
-
-
-################################################################################
 ################################ACCOUNTS########################################
 ################################################################################
 
@@ -45,6 +20,31 @@ cleos create account eosio aanuo EOS5wNaiDJqWBFGYS4RB5nks7ZYf72przz2QPcHz46kJrEv
 cleos create account eosio vtfootball EOS7dJcV4RBZ9YBrQuMwCSSu1RYt1r2TFdrHUXpA7EVzyv6yj6Wg7
 cleos create account eosio ticket1 EOS7dJcV4RBZ9YBrQuMwCSSu1RYt1r2TFdrHUXpA7EVzyv6yj6Wg7
 cleos create account eosio ticket2 EOS7dJcV4RBZ9YBrQuMwCSSu1RYt1r2TFdrHUXpA7EVzyv6yj6Wg7
+
+
+################################################################################
+#############################COMPILE & Deploy###################################
+################################################################################
+
+#Compile and deploy eosio.token
+cd /workspace/EOS_Boot_Camp_New/existing_contracts/eosio.contracts/contracts/eosio.token
+eosio-cpp -I include -o eosio.token.wasm src/eosio.token.cpp --abigen
+cleos set contract eosio.token . --abi eosio.token.abi -p eosio.token@active
+
+#Compile and deploy auction
+cd /workspace/EOS_Boot_Camp_New/our_contracts/auction
+eosio-cpp --abigen auction.cpp -o auction.wasm
+cleos set contract auction . --abi auction.abi -p auction@active
+
+#Compile and deploy carpool
+cd /workspace/EOS_Boot_Camp_New/our_contracts/carpool
+eosio-cpp --abigen carpool.cpp -o carpool.wasm -I /home/aanu/workirectory/eosio.cdt/bootcamp/EOS_Boot_Camp_New/existing_contracts/eosio.contracts/contracts/eosio.token/
+cleos set contract carpool . --abi carpool.abi -p carpool@active
+
+#Compile and deploy tradeticket
+cd /workspace/EOS_Boot_Camp_New/our_contracts/tradeticket
+eosio-cpp --abigen tradeticket.cpp -o tradeticket.wasm -I ../auction
+cleos set contract tradeticket . --abi tradeticket.abi -p tradeticket@active
 
 
 ################################################################################
