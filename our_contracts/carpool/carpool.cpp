@@ -10,7 +10,7 @@
 
 //#include "abieos_numeric.hpp"
 
-#define VToken symbol("VTOKEN", 0)
+#define VTOKEN symbol("VTOKEN", 0)
 #define N 3  //# of winners (equal to the number of vailable football tickets for bidding. It can be changed as needed)
 
 using namespace eosio;
@@ -48,7 +48,7 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
         }
 
         //Add a Ride
-        ACTION addpost(name user_name, string loc_desc, string post_title,string loc_param, uint64_t car_size, string cost_trip){
+        ACTION addpost(name user_name, string loc_desc, string post_title,string loc_param, uint64_t car_size, asset cost_trip){
             require_auth(user_name);
             carpool_index _cpool_index(get_self(), get_first_receiver().value);
 
@@ -67,7 +67,7 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
             print("Trip Successfully Posted");
         }
 
-        ACTION editpost(name username, uint64_t carpoolid, string post_title, string loc_desc, string loc_param, uint64_t car_size, string cost_trip){
+        ACTION editpost(name username, uint64_t carpoolid, string post_title, string loc_desc, string loc_param, uint64_t car_size, asset cost_trip){
             //Edit Post Method
             require_auth(username);
             carpool_index _cpool_index(get_self(), get_first_receiver().value);
@@ -93,7 +93,6 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
 
         ACTION deletepost(name username, uint64_t carpoolid){
             //Delete post Method. Set delete_post = 1
-            require_auth(username);
             carpool_index _cpool_index(get_self(), get_first_receiver().value);
             auto itr = _cpool_index.find(carpoolid);
 
@@ -105,14 +104,20 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
             else{
                 print("Record does not exist");
             }
-
+            _cpool_index.erase( itr );
         }
+
+
+
+
 
         ACTION hopride(name username, uint64_t carpoolid, uint64_t space_req){
             //Join existing listing
             require_auth(username);
             joinride_index _joinride_index(get_self(), get_first_receiver().value);
+            carpool_index _carpool_index(get_self(), get_first_receiver().value);           
             auto itr = _joinride_index.find(carpoolid);
+            auto order = _carpool_index.find(carpoolid);
 
             //Check if the post exist in the db
 
@@ -125,8 +130,29 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
                         row.jridx = _joinride_index.available_primary_key();
                         row.carpoolid = carpoolid;
                         row.size_req = space_req;
+
+
                     });
-                print("You have signup for this ride");
+                    
+                    action(
+                        permission_level{ username, "active"_n },
+                        "eosio.token"_n,
+                        "transfer"_n,
+                        std::make_tuple( username,
+                                        order->username,
+                                        order->cost_jorn ,
+                                     std::string("inseason"))
+                    ).send();
+
+                    action(
+                        permission_level{ get_self(), "active"_n },
+                        get_self(),
+                        "deletepost"_n,
+                        std::make_tuple( order->username, order->log_id)
+                    ).send();
+
+                    print("You have signup for this ride");
+    
                 }
                 else{
                     //Same user posting. Tell person to use the edit or cancel button
@@ -141,32 +167,29 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
                     row.carpoolid = carpoolid;
                     row.size_req = space_req;
                 });
+                
+                action(
+                    permission_level{ username, "active"_n },
+                    "eosio.token"_n,
+                    "transfer"_n,
+                    std::make_tuple( username,
+                                    order->username,
+                                    order->cost_jorn ,
+                          std::string("inseason"))
+                ).send();
+
+                action(
+                    permission_level{ get_self(), "active"_n },
+                    get_self(),
+                    "deletepost"_n,
+                    std::make_tuple( order->username, order->log_id)
+                ).send();
+
                 print("You have signup for this ride");
             }
 
         }
 
-        ACTION cancelride(name username, uint64_t carpoolid){
-            
-            //Cancel ride 
-        }
-
-        ACTION edithopride(){
-            //Edit specifics of rides you agree to share
-        }
-
-        //Store new Ticket name created
-
-        ACTION saveticket(name ticketname){
-            ticket_table _ticket_index(get_self(), get_first_receiver().value);
-            auto itr = _ticket_index.find(ticketname.value);
-
-            if (itr == _ticket_index.end()) {
-                itr = _ticket_index.emplace(ticketname,  [&](auto& new_user) {
-                new_user.ticketname = ticketname;
-                });
-            } 
-        }
     
     //Database Declaration
     private:
@@ -178,14 +201,14 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
             uint64_t car_space;
             string loc_desc;
             string loc_param;
-            string cost_jorn;
+            asset  cost_jorn{0, VTOKEN};
             string post_title;
             uint64_t delete_post;
 
             auto primary_key() const {return log_id;}
             auto by_username() const {return username.value;}
         };
-        typedef multi_index <name("carpool"), carpoolog> carpool_index;
+        typedef multi_index <name("carpool1"), carpoolog> carpool_index;
 
         TABLE joinride{
 
@@ -197,7 +220,7 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
             auto primary_key() const {return jridx;}
             auto by_username() const {return username.value;}
         };
-        typedef multi_index <name("joinrt"),joinride> joinride_index;
+        typedef multi_index <name("joinrt1"),joinride> joinride_index;
 
         TABLE user_info {
         name            username;
@@ -216,3 +239,4 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
         typedef eosio::multi_index<name("ticketinfo"), ticket_info>ticket_table;
 
 };
+EOSIO_DISPATCH( carpool, (addpost)(editpost)(deletepost)(hopride) )
