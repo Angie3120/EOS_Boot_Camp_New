@@ -2,7 +2,6 @@ To Run this code,
 
 First bash ./compile.sh
 Then bash ./bootstrap to create accounts - All account use the same public key
-Run the Demo.sh to create some Trip records
-Run Demo2.sh to join Rides
+Run the Demo.sh to create some Trip records and to join Rides
 
 From the contract, it is also possible to edit trips and even delete trips.
