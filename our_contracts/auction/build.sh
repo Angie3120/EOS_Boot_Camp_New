@@ -7,7 +7,7 @@ eosio-cpp --abigen auction.cpp -o auction.wasm
 cd /workspace/EOS_Boot_Camp_New/our_contracts/tradeticket
 
 #Compile auction
-eosio-cpp --abigen tradeticket.cpp -o tradeticket.wasm
+eosio-cpp --abigen tradeticket.cpp -o tradeticket.wasm -I ../auction
 
 cd /workspace/EOS_Boot_Camp_New/our_contracts/auction
 
