@@ -208,7 +208,7 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
             auto primary_key() const {return log_id;}
             auto by_username() const {return username.value;}
         };
-        typedef multi_index <name("carpool1"), carpoolog> carpool_index;
+        typedef multi_index <name("carpool"), carpoolog> carpool_index;
 
         TABLE joinride{
 
@@ -220,7 +220,7 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
             auto primary_key() const {return jridx;}
             auto by_username() const {return username.value;}
         };
-        typedef multi_index <name("joinrt1"),joinride> joinride_index;
+        typedef multi_index <name("joinrt"),joinride> joinride_index;
 
         TABLE user_info {
         name            username;
