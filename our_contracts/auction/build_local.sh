@@ -59,7 +59,10 @@ cleos set contract tradeticket . --abi tradeticket.abi -p tradeticket@active
 cleos set account permission auction active --add-code
 
 #Add eosio.code permission for carpool
-leos set account permission carpool active --add-code
+cleos set account permission carpool active --add-code
+
+#Add eosio.code permission for tradeticket
+cleos set account permission tradeticket active --add-code
 
 #Add eosio.code permission to auction's active permission for vtfootball (not 100% sure)
 cleos set account permission vtfootball active \
