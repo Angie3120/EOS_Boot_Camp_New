@@ -119,11 +119,25 @@ cleos push action tradeticket buyticket '["aanuo","ticket1","EOS5wNaiDJqWBFGYS4R
 
 ##We will have more transactions
 
-#2nd round
+##2nd round
+
+#For the 2nd round, we need to update the permission for ticket1
+cleos set account permission ticket1 active \
+'{"threshold": 1,"keys": [{"key": "EOS5wNaiDJqWBFGYS4RB5nks7ZYf72przz2QPcHz46kJrEvccfGZZ","weight": 1}],"accounts": [{"permission":{"actor":"tradeticket","permission":"eosio.code"},"weight":1}]}' \
+owner -p ticket1
+
+#buy and sell
 cleos push action tradeticket sellticket '["aanuo","ticket1","25 VTOKEN","inseason"]' -p ticket1
 cleos push action tradeticket buyticket '["zejia","ticket1","EOS8548cE8JioJT9ZRRdPqQ3KR6QmN6fH5ssE2ULKiBfbrmz7uYnX","inseason"]' -p zejia
 
-#3rd round
+##3rd round
+
+#For the 3rd round, we need to update the permission for ticket1
+cleos set account permission ticket1 active \
+'{"threshold": 1,"keys": [{"key": "EOS8548cE8JioJT9ZRRdPqQ3KR6QmN6fH5ssE2ULKiBfbrmz7uYnX","weight": 1}],"accounts": [{"permission":{"actor":"tradeticket","permission":"eosio.code"},"weight":1}]}' \
+owner -p ticket1
+
+#buy and sell
 cleos push action tradeticket sellticket '["zejia","ticket1","32 VTOKEN","inseason"]' -p ticket1
 cleos push action tradeticket buyticket '["weicheng","ticket1","EOS7nXVLLrEda6Xr8FG3hxyc47LsC19Us9avhUK3uEPiPghdJPG2c","inseason"]' -p weicheng
 
