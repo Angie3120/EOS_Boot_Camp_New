@@ -83,3 +83,17 @@ cleos set account permission zejia active '{"threshold": 1,"keys": [{"key": "EOS
 #cleos set account permission ticket2 active \
 #'{"threshold": 1,"keys": [{"key": "EOS7dJcV4RBZ9YBrQuMwCSSu1RYt1r2TFdrHUXpA7EVzyv6yj6Wg7","weight": 1}],"accounts": [{"permission":{"actor":"auction","permission":"eosio.code"},"weight":1}]}' \
 #owner -p ticket2
+
+
+################################################################################
+###############################Eosio.token######################################
+################################################################################
+
+echo "Begin issuing tokens"
+
+#Create, issue and transfer tokens
+cleos push action eosio.token create '[ "vtfootball", "1000000000 VTOKEN"]' -p eosio.token@active
+cleos push action eosio.token issue '[ "vtfootball", "100000000 VTOKEN", "Initial Token Offering" ]' -p vtfootball@active
+cleos push action eosio.token transfer '[ "vtfootball", "weicheng", "200 VTOKEN", "Send 200 VTOKEN to Weicheng" ]' -p vtfootball@active
+cleos push action eosio.token transfer '[ "vtfootball", "zejia", "200 VTOKEN", "Send 200 VTOKEN to Zejia" ]' -p vtfootball@active
+cleos push action eosio.token transfer '[ "vtfootball", "aanuo", "200 VTOKEN", "Send 200 VTOKEN to Aanuo" ]' -p vtfootball@active
