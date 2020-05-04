@@ -104,7 +104,6 @@ class [[eosio::contract("carpool")]] carpool: public eosio::contract {
             else{
                 print("Record does not exist");
             }
-            _cpool_index.erase( itr );
         }
 
 
