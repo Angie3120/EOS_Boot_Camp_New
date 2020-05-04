@@ -142,6 +142,7 @@ private:
     name holder;
     name ticket;
     asset ticket_price;
+    uint64_t price_value;
 
     int64_t primary_key() const{ return ticket.value; };
     //int64_t get_ticket() const{ return ticket.value; };
@@ -263,6 +264,7 @@ public:
         row.holder = user;
         row.ticket = ticket_update;
         row.ticket_price = ticket_price;
+	row.price_value = ticket_price.amount;
       });
     }
     else
@@ -271,6 +273,7 @@ public:
         row.holder = user;
         row.ticket = ticket_update;
         row.ticket_price = ticket_price;
+	row.price_value = ticket_price.amount;
       });
     }
   }
@@ -329,6 +332,7 @@ public:
           row.holder = user;
           row.ticket = order->ticket_for_bid;
           row.ticket_price = order->price_ask;
+	  row.price_value = order->price_ask.amount;
         });
       }
       //else
